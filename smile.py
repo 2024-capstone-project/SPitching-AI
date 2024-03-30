@@ -85,6 +85,10 @@ def draw_info_text(image, brect, facial_text, add):
 
     return image
 
+@st.cache
+def load_model():
+    joblib.load(model_save_path)
+
 def smile_detector(vid, loading_bar_smile):
     counter = 0
     smile_counter = 0
@@ -119,7 +123,7 @@ def smile_detector(vid, loading_bar_smile):
     model_save_path = r'smile_xgboost_model.pkl'
 
     # Load the XGBoost model
-    xgb_model = joblib.load(model_save_path)
+    xgb_model = load_model()
 
     # Read labels
     with open(r'smile_keypoint_classifier_label.csv',
