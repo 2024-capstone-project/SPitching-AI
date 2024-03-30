@@ -6,6 +6,7 @@ import sqlite3
 import datetime
 import plotly.express as px
 from displayDB import display_tables_and_contents
+from head_eye import head_eye
 
 # Get the current date and time
 current_datetime = datetime.datetime.now()
