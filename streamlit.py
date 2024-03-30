@@ -1,3 +1,5 @@
+import gc
+
 import streamlit as st
 import pandas as pd
 import os
@@ -766,3 +768,4 @@ elif st.session_state.state == 'analyse':
 
 # Close the database connection
 conn.close()
+gc.collect()
