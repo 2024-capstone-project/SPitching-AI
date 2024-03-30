@@ -7,6 +7,7 @@ import datetime
 import plotly.express as px
 from displayDB import display_tables_and_contents
 from head_eye import head_eye
+from smile import smile_detector
 from io import BytesIO
 import numpy as np
 import av
