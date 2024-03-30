@@ -135,7 +135,7 @@ def logging_csv(number, mode, landmark_list):
     if mode == 0:
         pass
     if mode == 1 and (0 <= number <= 9):
-        csv_path = 'E:\pgms\hands\hand-gesture-recognition-mediapipe-main\model\keypoint_classifier\keypoint.csv'
+        csv_path = 'hand_keypoint.csv'
         with open(csv_path, 'a', newline="") as f:
             writer = csv.writer(f)
             writer.writerow([number, *landmark_list])
