@@ -105,17 +105,7 @@ def smile_detector(vid, loading_bar_smile):
     # cap = cv.VideoCapture(r'E:\website files\The Art of Acting.mp4')
     cap.set(cv.CAP_PROP_FRAME_WIDTH, cap_width)
     cap.set(cv.CAP_PROP_FRAME_HEIGHT, cap_height)
-
-    # Define the codec and create a VideoWriter object to save the video
-    fourcc = cv.VideoWriter_fourcc(*'avc1') # Change to 'avc1' for H.264 codec
-    fps = 30.0  # Frames per second (you can adjust this)
-
-    # Define the output video dimensions (use the same as the input if not resizing)
-    frame_width = int(cap.get(3))
-    frame_height = int(cap.get(4))
-
-    out = cv.VideoWriter(output_file, fourcc, fps, (frame_width, frame_height))
-
+    
     loading_bar_smile.progress(20)
 
     # Model load
@@ -205,12 +195,10 @@ def smile_detector(vid, loading_bar_smile):
         # Screen reflection
         cv.imshow('Facial Emotion Recognition', debug_image)
         output_frames.append(debug_image)
-        out.write(debug_image)
     
     loading_bar_smile.progress(80)
 
     cap.release()
-    out.release()
     cv.destroyAllWindows()
 
     try:
