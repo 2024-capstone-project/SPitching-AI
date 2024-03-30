@@ -9,8 +9,6 @@ import mediapipe as mp
 from xgboost import XGBClassifier
 import streamlit as st
 
-output_file = r'E:\project demo\media\smile_det.mp4'
-
 def calc_landmark_list(image, landmarks):
     image_width, image_height = image.shape[1], image.shape[0]
 
