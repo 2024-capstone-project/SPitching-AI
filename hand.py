@@ -9,6 +9,7 @@ import cv2 as cv
 import numpy as np
 import mediapipe as mp
 import joblib
+import streamlit as st
 
 GREEN = (0, 255, 0)
 
