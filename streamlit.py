@@ -427,3 +427,18 @@ elif st.session_state.state == 'analyse':
         loading_bar_he = st.progress(0)
 
         output_frames, message, head_score, eye_score = head_eye(file_path, loading_bar_he)
+
+        # Create a video writer
+        output_video_path = "output_video.mp4"
+        fourcc = cv2.VideoWriter_fourcc(*'avc1')
+        output_video = cv2.VideoWriter(output_video_path, fourcc, 20.0, (output_frames[0].shape[1], output_frames[0].shape[0]))
+
+        # Write frames to the video
+        for frame in output_frames:
+            output_video.write(frame)
+
+        # Release the video writer
+        output_video.release()
+
+        # Update loading bar and text
+        loading_bar_he.progress(100)
