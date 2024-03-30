@@ -325,3 +325,102 @@ elif st.session_state.state == 'leaderboard':
 
     # Display the leaderboard table
     st.table(leaderboard_df.style.highlight_max(axis=0, subset=['Average Overall Score'], color='#FFD700'))
+
+elif st.session_state.state == 'analyse':
+
+    # Display user information in the sidebar
+    # Set the account icon image URL
+    account_icon_url = "https://cdn.iconscout.com/icon/free/png-256/free-account-269-866236.png"  # Replace with the actual URL of your account icon
+    # Calculate the center alignment
+    center_alignment = "text-align: center;"
+
+    # Display account icon and welcome message with center alignment
+    st.sidebar.markdown(f'<div style="{center_alignment}"><img src="{account_icon_url}" width="50"></div>', unsafe_allow_html=True)
+    st.sidebar.header(f"Welcome, {st.session_state.username}!")
+    
+    # Dropdown menu in the sidebar
+    menu_option = st.sidebar.selectbox("Options", ["Analyse", "Profile", "Leaderboard", "Log out"])
+
+    if menu_option == "Log out":
+        st.session_state.state = 'login'
+    if menu_option == "Profile":
+        st.session_state.state = 'main'
+    elif menu_option == "Leaderboard":
+        st.session_state.state = 'leaderboard' 
+
+    st.markdown("""
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Century+Gothic:wght@400&display=swap');
+            h1 {
+                text-align: center;
+                font-size: 35px;
+                font-family: 'Century Gothic', sans-serif;
+            }
+            h2 {
+                text-align: center;
+                font-size: 24px;
+                font-family: 'Century Gothic', sans-serif;
+            }
+            span.custom-font {
+                font-family: 'Century Gothic', sans-serif;
+            }
+            span.red-text {
+                color: red;
+            }
+        </style>
+        <h1><span class="custom-font">Interview </span><span class="custom-font red-text">Buster</span></h1>
+        <h2>An <span class="red-text custom-font">AI powered</span> Non-verbal Communication Coach</h1>
+    """, unsafe_allow_html=True)
+
+    import pandas as pd
+
+    # Upload video file
+    uploaded_file = st.file_uploader("Choose a video file", type=["mp4"])
+    #record_button = st.button("Record Live Video")
+    uploaded = 0
+
+    if uploaded_file is not None:
+        
+        # Display video details
+        video_details = {"Name": uploaded_file.name, "Type": uploaded_file.type, "Size": uploaded_file.size}
+
+        # Create the "temp" directory if it doesn't exist
+        os.makedirs("temp", exist_ok=True)
+
+        # Save the file temporarily and get the file path
+        with st.spinner("Uploading..."):
+            file_path = os.path.join("temp", uploaded_file.name)
+            with open(file_path, "wb") as temp_file:
+                temp_file.write(uploaded_file.read())
+        
+        uploaded = 1
+
+    if uploaded ==1:
+        
+        # Process the video and save the output frames
+        st.markdown("""
+            <style>
+                @import url('https://fonts.googleapis.com/css2?family=Century+Gothic:wght@400&display=swap');
+                h1 {
+                    text-align: center;
+                    font-size: 35px;
+                    font-family: 'Century Gothic', sans-serif;
+                }
+                h2 {
+                    text-align: center;
+                    font-size: 24px;
+                    font-family: 'Century Gothic', sans-serif;
+                }
+                span.custom-font {
+                    font-family: 'Century Gothic', sans-serif;
+                }
+                span.red-text {
+                    color: red;
+                }
+            </style>
+            <h2></span> Head Pose and Eye Contact Analysis</h1>
+        """, unsafe_allow_html=True)
+        
+        # Loading bar and message for smile detection
+        loading_text = st.text("Please wait. Video is being processed for eye contact and head pose analysis...")
+        loading_bar_he = st.progress(0)
