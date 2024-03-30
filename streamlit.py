@@ -461,3 +461,64 @@ elif st.session_state.state == 'analyse':
 
         # Update loading bar
         loading_bar_he.progress(100)
+
+        #SMILE DET
+
+        st.markdown("""
+            <style>
+                @import url('https://fonts.googleapis.com/css2?family=Century+Gothic:wght@400&display=swap');
+                h1 {
+                    text-align: center;
+                    font-size: 35px;
+                    font-family: 'Century Gothic', sans-serif;
+                }
+                h2 {
+                    text-align: center;
+                    font-size: 24px;
+                    font-family: 'Century Gothic', sans-serif;
+                }
+                span.custom-font {
+                    font-family: 'Century Gothic', sans-serif;
+                }
+                span.red-text {
+                    color: red;
+                }
+            </style>
+            <h2></span> Smile Analysis</h1>
+        """, unsafe_allow_html=True)
+
+        # Loading bar and message for smile detection
+        loading_text = st.text("Please wait. Video is being processed for smile analysis...")
+        loading_bar_smile = st.progress(0)
+
+        # Process the video and save the output frames
+        output_frames, message, smile_score = smile_detector(file_path, loading_bar_smile)
+
+        # Encode video frames using PyAV
+        output_video_bytes = BytesIO()
+        output_frames = np.array(output_frames)  # Convert frames to numpy array
+
+        with av.open(output_video_bytes, 'w', format='mp4') as container:
+            stream = container.add_stream('h264', rate=20)  # H264 codec with 20 fps
+            for frame in output_frames:
+                frame = av.VideoFrame.from_ndarray(frame, format='rgb24')
+                packet = stream.encode(frame)
+                if packet:
+                    container.mux(packet)
+
+        # Display the output video
+        output_video_bytes.seek(0)  # Reset BytesIO object to start
+        st.video(output_video_bytes, format='video/mp4')
+
+        # Display the health bars
+        data = {'Metric': ['Smile Score'],
+            'Score': [int(smile_score)]}
+
+        df = pd.DataFrame(data)
+        st.table(df)
+
+        st.write(f"Smile score is given for maintaining smile")
+
+        # Update loading bar and text
+        loading_bar_smile.progress(100)
+        loading_text.text("Smile analysis done!")
