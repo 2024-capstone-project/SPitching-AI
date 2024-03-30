@@ -8,7 +8,6 @@ import os
 import cv2 as cv
 import numpy as np
 import mediapipe as mp
-from pgms.hands.hand_main.filename import filen
 from pgms.hands.hand_main.model import KeyPointClassifier
 import joblib
 
@@ -287,18 +286,6 @@ def hand(vid, loading_bar_hand):
     count = 0
 
     output_frames = []
-
-    output_file = filen(vid)
-
-    #print(output_file)
-
-    # Create a VideoWriter object
-    fourcc = cv.VideoWriter_fourcc(*'avc1')
-    fps = 30.0
-    frame_width = int(cap.get(3))
-    frame_height = int(cap.get(4))
-    out = cv.VideoWriter(output_file, fourcc, fps, (frame_width, frame_height))
-
     loading_bar_hand.progress(20)
 
     while True:
@@ -369,13 +356,11 @@ def hand(vid, loading_bar_hand):
 
         #cv.imshow('Hand Gesture Recognition', debug_image)
         output_frames.append(debug_image)
-        out.write(debug_image)
 
         if cv.waitKey(24) & 0xFF == ord('q'):
             break
 
     cap.release()
-    out.release()
     cv.destroyAllWindows()
 
     loading_bar_hand.progress(80)
