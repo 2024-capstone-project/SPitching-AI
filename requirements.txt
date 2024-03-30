@@ -3,3 +3,4 @@ plotly
 mediapipe
 av
 joblib
+xgboost
