@@ -9,6 +9,7 @@ from displayDB import display_tables_and_contents
 from head_eye import head_eye
 from smile import smile_detector
 from hand import hand
+from pose_detector import body
 from io import BytesIO
 import numpy as np
 import av
@@ -561,6 +562,7 @@ elif st.session_state.state == 'analyse':
 
         with av.open(output_video_bytes, 'w', format='mp4') as container:
             stream = container.add_stream('h264', rate=20)  # H264 codec with 20 fps
+                  
             for frame in output_frames:
                 frame = av.VideoFrame.from_ndarray(frame, format='rgb24')
                 packet = stream.encode(frame)
@@ -585,3 +587,175 @@ elif st.session_state.state == 'analyse':
         loading_bar_hand.progress(100)
         loading_text.text("Hand analysis done!")
 
+        #POSE DET
+
+        st.markdown("""
+            <style>
+                @import url('https://fonts.googleapis.com/css2?family=Century+Gothic:wght@400&display=swap');
+                h1 {
+                    text-align: center;
+                    font-size: 35px;
+                    font-family: 'Century Gothic', sans-serif;
+                }
+                h2 {
+                    text-align: center;
+                    font-size: 24px;
+                    font-family: 'Century Gothic', sans-serif;
+                }
+                span.custom-font {
+                    font-family: 'Century Gothic', sans-serif;
+                }
+                span.red-text {
+                    color: red;
+                }
+            </style>
+            <h2></span> Pose Analysis</h1>
+        """, unsafe_allow_html=True)
+
+        # Loading bar and message for smile detection
+        loading_text = st.text("Please wait. Video is being processed for pose analysis...")
+        loading_bar_pose = st.progress(0)
+
+        # Process the video and save the output frames
+        output_frames, message, pose_score = body(file_path, loading_bar_pose)
+
+        with av.open(output_video_bytes, 'w', format='mp4') as container:
+            stream = container.add_stream('h264', rate=20)  # H264 codec with 20 fps
+                  
+            for frame in output_frames:
+                frame = av.VideoFrame.from_ndarray(frame, format='rgb24')
+                packet = stream.encode(frame)
+                if packet:
+                    container.mux(packet)
+
+        # Display the output video
+        output_video_bytes.seek(0)  # Reset BytesIO object to start
+        st.video(output_video_bytes, format='video/mp4')
+              
+        st.markdown(str(message))
+
+        # Display the health bars
+        data = {'Metric': ['Pose Score'],
+            'Score': [int(pose_score)]}
+
+        df = pd.DataFrame(data)
+        st.table(df)
+
+        st.write(f"Pose score is given for maintaining good body pose")
+
+        loading_bar_pose.progress(100)
+        loading_text.text("Pose analysis done!")
+
+        avg_score = (head_score + eye_score + smile_score + hand_score + pose_score)/5
+    
+        # Retrieve user data
+        username = st.session_state.username
+        update_user_scores(username, int(head_score), int(eye_score), int(smile_score), int(hand_score), int(pose_score), current_date, avg_score)
+        users = c.execute('''
+                            SELECT * FROM users
+                            WHERE username = ?
+                            ''', (username,)).fetchone()
+
+        if users:
+            st.title("Your Progress")
+
+            table_name = f"{username}_scores"
+
+            # Query scores from the database
+            scores_data = c.execute(f'''
+                                    SELECT head_score, eye_score, smile_score, hand_score, pose_score, date_added
+                                    FROM {table_name}
+                                    ''').fetchall()
+            
+            scores_= c.execute(f'''
+                                    SELECT head_score, eye_score, smile_score, hand_score, pose_score
+                                    FROM {table_name}
+                                    ''').fetchall()
+
+            if scores_data:
+
+                # Query scores from the database, including 'avg_score'
+                avgscores_data = c.execute(f'''
+                                        SELECT avg_score, date_added
+                                        FROM {table_name}
+                                        ''').fetchall()
+
+                if avgscores_data:
+                    # Create a DataFrame
+                    scores_df = pd.DataFrame(avgscores_data, columns=['Avg_Score', 'Date'])
+                    
+                    # Set the 'Date' column as the index
+                    scores_df.set_index('Date', inplace=True)
+
+                    # Calculate the overall average of 'avg_scores'
+                    overall_avg_score = scores_df['Avg_Score'].mean()
+
+                    # Define color based on ranges
+                    if overall_avg_score < 40:
+                        avg_score_color = 'red'
+                    elif 40 <= overall_avg_score <= 70:
+                        avg_score_color = 'orange'
+                    else:
+                        avg_score_color = 'green'
+
+                    # Create a curvy line chart using Plotly
+                    fig = px.line(scores_df, x=scores_df.index, y='Avg_Score', labels={'Avg_Score': 'Overall Score'}, title = 'Overall score over time')
+                    fig.update_traces(line_shape='spline', line_smoothing=0.2, marker=dict(color='blue'))  # You can adjust the line_smoothing for curvature
+                    
+                    # Display the overall average score above the first graph with specified color
+                    st.markdown(f"Average Overall Score:<span style='color: {avg_score_color}; font-size: 40px;'> {overall_avg_score:.2f}</span>", unsafe_allow_html=True)
+
+                    # Display the Plotly figure
+                    st.plotly_chart(fig)
+
+                # Create a DataFrame
+                scores_df = pd.DataFrame(scores_data, columns=['Head', 'Eye', 'Smile', 'Hand', 'Pose', 'Date'])
+                scores = pd.DataFrame(scores_, columns=['Head', 'Eye', 'Smile', 'Hand', 'Pose'])
+
+                # Calculate the average scores
+                avg_scores = scores.mean()
+                
+                # Display the average scores as text
+                # Function to format scores with different colors based on ranges
+                def format_score_with_color(score):
+                    if score < 40:
+                        return f'<span style="color: red;">{score:.2f}</span>'
+                    elif 40 <= score <= 70:
+                        return f'<span style="color: orange;">{score:.2f}</span>'
+                    elif 70 < score <= 100:
+                        return f'<span style="color: green;">{score:.2f}</span>'
+                    else:
+                        return f'{score:.2f}'
+                
+                # Apply the formatting function to each average score
+                formatted_avg_scores = avg_scores.apply(format_score_with_color)
+                
+                # Display the average scores with different colors
+                st.markdown(f"Average Scores: Head={formatted_avg_scores['Head']}, Eye={formatted_avg_scores['Eye']}, Smile={formatted_avg_scores['Smile']}, Hand={formatted_avg_scores['Hand']}, Pose={formatted_avg_scores['Pose']}", unsafe_allow_html=True)
+                
+                # Set the 'Date' column as the index
+                scores_df.set_index('Date', inplace=True)
+
+                # Create a curvy line chart using Plotly
+                fig = px.line(scores_df, x=scores_df.index, y=scores_df.columns, labels={'value': 'Score'}, title='Scores Over Time')
+                fig.update_traces(line_shape='spline', line_smoothing=0.2, marker=dict(size=8, color='blue'))  # Corrected attribute to 'marker'
+
+                n_videos = len(scores_df)
+
+                c.execute('''
+                    UPDATE users
+                    SET avg_scores = ?,
+                        n_videos = ?
+                    WHERE username = ?;
+                ''', (overall_avg_score, n_videos, username))
+
+                conn.commit()
+
+                #display_tables_and_contents('users.db')
+                #print('avg score :', overall_avg_score, 'n videos: ', n_videos)
+                
+                # Display the Plotly figure
+                st.plotly_chart(fig, use_container_width=True)
+
+# Close the database connection
+conn.close()
