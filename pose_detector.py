@@ -6,6 +6,7 @@ import cv2
 import numpy as np
 import mediapipe as mp
 import joblib
+import streamlit as st
 
 def calc_landmark_list(image, landmarks):
     image_width, image_height = image.shape[1], image.shape[0]
