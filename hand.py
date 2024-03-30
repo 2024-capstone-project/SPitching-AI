@@ -262,7 +262,7 @@ hands = mp_hands.Hands(
     min_tracking_confidence=min_tracking_confidence,
 )
 
-@st.cache
+@st.cache_resource
 def load_model():
     return joblib.load(r'hand_xgboost_model.pkl')
 
