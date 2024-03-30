@@ -114,8 +114,7 @@ def body(vid, loading_bar_pose):
     pose = mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5)
 
     # Load the XGBoost model
-    model_path = load_model()
-    xg_boost_model = joblib.load(model_path)
+    xg_boost_model = load_model()
 
     # Read labels
     with open(r'pose_keypoint_classifier_label.csv', encoding='utf-8-sig') as f:
