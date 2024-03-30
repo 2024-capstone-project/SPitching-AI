@@ -122,3 +122,206 @@ elif st.session_state.state == 'signup':
                     st.session_state.state = 'login'
             else:
                 st.error("Passwords do not match. Please try again.")
+
+elif st.session_state.state == 'main':
+
+    # Set the account icon image URL
+    account_icon_url = "https://cdn.iconscout.com/icon/free/png-256/free-account-269-866236.png"  # Replace with the actual URL of your account icon
+    # Calculate the center alignment
+    center_alignment = "text-align: center;"
+
+    # Display account icon and welcome message with center alignment
+    st.sidebar.markdown(f'<div style="{center_alignment}"><img src="{account_icon_url}" width="50"></div>', unsafe_allow_html=True)
+    st.sidebar.header(f"Welcome, {st.session_state.username}!")
+        
+    # Dropdown menu in the sidebar
+    menu_option = st.sidebar.selectbox("Options", ["Profile", "Analyse", "Leaderboard", "Log out"])
+
+    if menu_option == "Log out":
+        st.session_state.state = 'login'
+    elif menu_option == "Analyse":
+        st.session_state.state = 'analyse'
+    elif menu_option == "Leaderboard":
+        st.session_state.state = 'leaderboard' 
+
+    st.markdown("""
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Century+Gothic:wght@400&display=swap');
+            h1 {
+                text-align: center;
+                font-size: 35px;
+                font-family: 'Century Gothic', sans-serif;
+            }
+            h2 {
+                text-align: center;
+                font-size: 24px;
+                font-family: 'Century Gothic', sans-serif;
+            }
+            span.custom-font {
+                font-family: 'Century Gothic', sans-serif;
+            }
+            span.red-text {
+                color: red;
+            }
+        </style>
+        <h1><span class="custom-font">Interview </span><span class="custom-font red-text">Buster</span></h1>
+        <h2>An <span class="red-text custom-font">AI powered</span> Non-verbal Communication Coach</h1>
+    """, unsafe_allow_html=True)
+
+    # Display progress graph
+    username = st.session_state.username
+    table_name = f"{username}_scores"
+
+    # Query scores from the database
+    scores_data = c.execute(f'''
+                            SELECT head_score, eye_score, smile_score, hand_score, pose_score, date_added
+                            FROM {table_name}
+                            ''').fetchall()
+    
+    scores_= c.execute(f'''
+                            SELECT head_score, eye_score, smile_score, hand_score, pose_score
+                            FROM {table_name}
+                            ''').fetchall()
+    
+    num_videos_analyzed = len(scores_data)
+
+    if num_videos_analyzed>=2:
+        st.title("Your Progress so far")
+
+        # Query scores from the database, including 'avg_score'
+        avgscores_data = c.execute(f'''
+                                SELECT avg_score, date_added
+                                FROM {table_name}
+                                ''').fetchall()
+
+        if avgscores_data:
+            # Create a DataFrame
+            scores_df = pd.DataFrame(avgscores_data, columns=['Avg_Score', 'Date'])
+            
+            # Set the 'Date' column as the index
+            scores_df.set_index('Date', inplace=True)
+
+            # Calculate the overall average of 'avg_scores'
+            overall_avg_score = scores_df['Avg_Score'].mean()
+
+            # Define color based on ranges
+            if overall_avg_score < 40:
+                avg_score_color = 'red'
+            elif 40 <= overall_avg_score <= 70:
+                avg_score_color = 'orange'
+            else:
+                avg_score_color = 'green'
+
+            # Create a curvy line chart using Plotly
+            fig = px.line(scores_df, x=scores_df.index, y='Avg_Score', labels={'Avg_Score': 'Overall Score'}, title = 'Overall score over time')
+            fig.update_traces(line_shape='spline', line_smoothing=0.2, marker=dict(color='blue'))  # You can adjust the line_smoothing for curvature
+            
+            # Display the overall average score above the first graph with specified color
+            st.markdown(f"Average Overall Score:<span style='color: {avg_score_color}; font-size: 40px;'> {overall_avg_score:.2f}</span>", unsafe_allow_html=True)
+
+            # Display the number of videos analyzed
+            st.markdown(f"Number of Videos Analyzed: {num_videos_analyzed}")
+
+            # Display the Plotly figure
+            st.plotly_chart(fig)
+
+        # Create a DataFrame
+        scores_df = pd.DataFrame(scores_data, columns=['Head', 'Eye', 'Smile', 'Hand', 'Pose', 'Date'])
+        scores = pd.DataFrame(scores_, columns=['Head', 'Eye', 'Smile', 'Hand', 'Pose'])
+
+        # Calculate the average scores
+        avg_scores = scores.mean()
+        
+        # Display the average scores as text
+        # Function to format scores with different colors based on ranges
+        def format_score_with_color(score):
+            if score < 40:
+                return f'<span style="color: red;">{score:.2f}</span>'
+            elif 40 <= score <= 70:
+                return f'<span style="color: orange;">{score:.2f}</span>'
+            elif 70 < score <= 100:
+                return f'<span style="color: green;">{score:.2f}</span>'
+            else:
+                return f'{score:.2f}'
+        
+        # Apply the formatting function to each average score
+        formatted_avg_scores = avg_scores.apply(format_score_with_color)
+        
+        # Display the average scores with different colors
+        st.markdown(f"Average Scores: Head={formatted_avg_scores['Head']}, Eye={formatted_avg_scores['Eye']}, Smile={formatted_avg_scores['Smile']}, Hand={formatted_avg_scores['Hand']}, Pose={formatted_avg_scores['Pose']}", unsafe_allow_html=True)
+        
+        # Set the 'Date' column as the index
+        scores_df.set_index('Date', inplace=True)
+
+        # Create a curvy line chart using Plotly
+        fig = px.line(scores_df, x=scores_df.index, y=scores_df.columns, labels={'value': 'Score'}, title='Scores Over Time')
+        fig.update_traces(line_shape='spline', line_smoothing=0.2, marker=dict(size=8, color='blue'))  # Corrected attribute to 'marker'
+
+        # Display the Plotly figure
+        st.plotly_chart(fig, use_container_width=True)
+    else:
+        st.write("No progress data available. Analyse atleast 2 videos to view your progress")
+
+    # Button to navigate to 'Welcome' page
+    if st.button("Analyse a video"):
+        st.session_state.state = 'analyse'
+
+elif st.session_state.state == 'leaderboard':
+
+    account_icon_url = "https://cdn.iconscout.com/icon/free/png-256/free-account-269-866236.png"  # Replace with the actual URL of your account icon
+    # Calculate the center alignment
+    center_alignment = "text-align: center;"
+
+    # Display account icon and welcome message with center alignment
+    st.sidebar.markdown(f'<div style="{center_alignment}"><img src="{account_icon_url}" width="50"></div>', unsafe_allow_html=True)
+    st.sidebar.header(f"Welcome, {st.session_state.username}!")
+
+    st.markdown("""
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Century+Gothic:wght@400&display=swap');
+            h1 {
+                text-align: center;
+                font-size: 35px;
+                font-family: 'Century Gothic', sans-serif;
+            }
+            h2 {
+                text-align: center;
+                font-size: 24px;
+                font-family: 'Century Gothic', sans-serif;
+            }
+            span.custom-font {
+                font-family: 'Century Gothic', sans-serif;
+            }
+            span.red-text {
+                color: red;
+            }
+        </style>
+        <h1><span class="custom-font">Interview </span><span class="custom-font red-text">Buster</span></h1>
+        <h2></span>Leaderboard</h1>
+    """, unsafe_allow_html=True)
+    
+    # Dropdown menu in the sidebar
+    menu_option = st.sidebar.selectbox("Options", ["Leaderboard", "Profile", "Analyse", "Log out"])
+
+    if menu_option == "Log out":
+        st.session_state.state = 'login'
+    if menu_option == "Profile":
+        st.session_state.state = 'main'
+    elif menu_option == "Analyse":
+        st.session_state.state = 'analyse' 
+
+    # Sample SQL query to retrieve data from the users table, ordered by avg_scores in descending order
+    leaderboard_data = c.execute('''
+        SELECT username, avg_scores, n_videos
+        FROM users
+        ORDER BY avg_scores DESC
+    ''').fetchall()
+
+    # Create a DataFrame from the query results
+    leaderboard_df = pd.DataFrame(leaderboard_data, columns=['Username', 'Average Overall Score', 'Number of Videos'])
+
+    # Convert 'Number of Videos' column to integers, keeping NaN values unchanged
+    leaderboard_df['Number of Videos'] = pd.to_numeric(leaderboard_df['Number of Videos'], errors='coerce').astype('Int64')
+
+    # Display the leaderboard table
+    st.table(leaderboard_df.style.highlight_max(axis=0, subset=['Average Overall Score'], color='#FFD700'))
