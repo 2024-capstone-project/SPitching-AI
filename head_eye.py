@@ -752,7 +752,7 @@ def head_eye(vid, loading_bar_smile):
                     brect,
                     text)
             
-            cv2.imshow('Frame', frame)
+            #cv2.imshow('Frame', frame)
             output_frames.append(frame)
             #st.image(frame, channels="BGR", caption="Processed Frame")
 
