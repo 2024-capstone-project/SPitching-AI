@@ -22,14 +22,9 @@ current_datetime = datetime.datetime.now()
 # Format it as a string including seconds and with the desired format
 current_date = current_datetime.strftime("%dth %b %H:%M:%S")
 
-@st.cache(allow_output_mutation=True)  # Cache the connection object
-def get_database_connection():
-    conn = sqlite3.connect('users.db')
-    c = conn.cursor()
-    return conn, c
-
-# Get the cached connection object
-conn, c = get_database_connection()
+# Create or connect to the SQLite database
+conn = sqlite3.connect('users.db')
+c = conn.cursor()
 
 # Create a table to store user data if it doesn't exist
 c.execute('''
