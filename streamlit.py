@@ -8,6 +8,7 @@ import plotly.express as px
 from displayDB import display_tables_and_contents
 from head_eye import head_eye
 from smile import smile_detector
+from hand import hand
 from io import BytesIO
 import numpy as np
 import av
@@ -525,3 +526,62 @@ elif st.session_state.state == 'analyse':
         # Update loading bar and text
         loading_bar_smile.progress(100)
         loading_text.text("Smile analysis done!")
+
+        #HANDS DET
+
+        st.markdown("""
+            <style>
+                @import url('https://fonts.googleapis.com/css2?family=Century+Gothic:wght@400&display=swap');
+                h1 {
+                    text-align: center;
+                    font-size: 35px;
+                    font-family: 'Century Gothic', sans-serif;
+                }
+                h2 {
+                    text-align: center;
+                    font-size: 24px;
+                    font-family: 'Century Gothic', sans-serif;
+                }
+                span.custom-font {
+                    font-family: 'Century Gothic', sans-serif;
+                }
+                span.red-text {
+                    color: red;
+                }
+            </style>
+            <h2></span> Hand Analysis</h1>
+        """, unsafe_allow_html=True)
+
+        # Loading bar and message for smile detection
+        loading_text = st.text("Please wait. Video is being processed for hand analysis...")
+        loading_bar_hand = st.progress(0)
+
+        # Process the video and save the output frames
+        output_frames, message, hand_score = hand(file_path, loading_bar_hand)
+
+        with av.open(output_video_bytes, 'w', format='mp4') as container:
+            stream = container.add_stream('h264', rate=20)  # H264 codec with 20 fps
+            for frame in output_frames:
+                frame = av.VideoFrame.from_ndarray(frame, format='rgb24')
+                packet = stream.encode(frame)
+                if packet:
+                    container.mux(packet)
+
+        # Display the output video
+        output_video_bytes.seek(0)  # Reset BytesIO object to start
+        st.video(output_video_bytes, format='video/mp4')
+              
+        st.markdown(str(message))
+
+        # Display the health bars
+        data = {'Metric': ['Hand Score'],
+            'Score': [int(hand_score)]}
+
+        df = pd.DataFrame(data)
+        st.table(df)
+
+        st.write(f"Hand score is given for maintaining open hand gestures")
+
+        loading_bar_hand.progress(100)
+        loading_text.text("Hand analysis done!")
+
