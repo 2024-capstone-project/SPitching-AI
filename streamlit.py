@@ -430,7 +430,7 @@ elif st.session_state.state == 'analyse':
 
         # Create a video writer
         output_video_path = "output_video.mp4"
-        fourcc = cv2.VideoWriter_fourcc(*'avc1')
+        fourcc = cv2.VideoWriter_fourcc(*'H264')
         output_video = cv2.VideoWriter(output_video_path, fourcc, 20.0, (output_frames[0].shape[1], output_frames[0].shape[0]))
 
         # Write frames to the video
