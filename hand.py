@@ -375,7 +375,7 @@ def hand(vid, loading_bar_hand):
         close_score = (closecount/count)*100
         point_score = (pointcount/count)*100
 
-        print(keypoint_classifier_labels[0], open_score, keypoint_classifier_labels[1], close_score, keypoint_classifier_labels[2], point_score)
+        #print(keypoint_classifier_labels[0], open_score, keypoint_classifier_labels[1], close_score, keypoint_classifier_labels[2], point_score)
 
         messagep = 'YOUR POSITIVE AREAS: '
         messagen = 'NEEDS IMPROVEMENT: '
