@@ -87,7 +87,7 @@ def draw_info_text(image, brect, facial_text, add):
 
 @st.cache
 def load_model():
-    joblib.load(r'smile_xgboost_model.pkl')
+    return joblib.load(r'smile_xgboost_model.pkl')
 
 def smile_detector(vid, loading_bar_smile):
     counter = 0
