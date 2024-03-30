@@ -85,7 +85,7 @@ def draw_info_text(image, brect, facial_text, add):
 
     return image
 
-@st.cache
+@st.cache_resource
 def load_model():
     return joblib.load(r'smile_xgboost_model.pkl')
 
