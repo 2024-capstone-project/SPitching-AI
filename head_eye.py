@@ -447,7 +447,7 @@ def head_eye(vid, loading_bar_smile):
         exit()
 
     # Define the codec and create a VideoWriter object to save the video
-    fourcc = cv2.VideoWriter_fourcc(*'avc1') # Change to 'avc1' for H.264 codec
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v') # Change to 'avc1' for H.264 codec
     fps = 30.0  # Frames per second (you can adjust this)
 
     # Define the output video dimensions (use the same as the input if not resizing)
