@@ -8,6 +8,7 @@ import plotly.express as px
 from displayDB import display_tables_and_contents
 from head_eye import head_eye
 from io import BytesIO
+import numpy as np
 import av
 
 # Get the current date and time
