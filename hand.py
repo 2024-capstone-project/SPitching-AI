@@ -8,7 +8,6 @@ import os
 import cv2 as cv
 import numpy as np
 import mediapipe as mp
-from pgms.hands.hand_main.model import KeyPointClassifier
 import joblib
 
 GREEN = (0, 255, 0)
