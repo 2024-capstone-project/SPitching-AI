@@ -511,6 +511,8 @@ elif st.session_state.state == 'analyse':
         output_video_bytes.seek(0)  # Reset BytesIO object to start
         st.video(output_video_bytes, format='video/mp4')
 
+        st.markdown(str(message))
+
         # Display the health bars
         data = {'Metric': ['Smile Score'],
             'Score': [int(smile_score)]}
