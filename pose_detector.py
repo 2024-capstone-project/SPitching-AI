@@ -81,7 +81,7 @@ def draw_info_text(image, brect, facial_text):
 
 @st.cache
 def load_model():
-    joblib.load(r'pose_XGB_model.pkl')
+    return joblib.load(r'pose_XGB_model.pkl')
 
 def body(vid, loading_bar_pose):
     # Rest of your code remains mostly unchanged, with adjustments for the Pose model
