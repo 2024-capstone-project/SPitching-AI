@@ -429,7 +429,7 @@ elif st.session_state.state == 'analyse':
         output_frames, message, head_score, eye_score = head_eye(file_path, loading_bar_he)
 
         # Create a video writer
-        output_video_path = "output_video.mp4"
+        output_video_path = "output_video"
         fourcc = cv2.VideoWriter_fourcc(*'H264')
         output_video = cv2.VideoWriter(output_video_path, fourcc, 20.0, (output_frames[0].shape[1], output_frames[0].shape[0]))
 
