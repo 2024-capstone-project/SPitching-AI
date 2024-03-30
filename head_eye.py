@@ -576,7 +576,7 @@ def head_eye(vid, loading_bar_smile):
 
                 threshold = 10 
 
-                print(abs(fhead[0] - chin[0]))
+                #print(abs(fhead[0] - chin[0]))
 
                 # Check if the slope is almost straight
                 if straight == 1:
@@ -724,7 +724,7 @@ def head_eye(vid, loading_bar_smile):
                             #cv2.rectangle(frame, (25, 40), (200, 66), BLACK, -1)
                             text = 'Eye Contact'
                             rect_color = (0, 255, 0)  # Green
-                            print(count, ": Eye contact")
+                            #print(count, ": Eye contact")
                             #cv2.putText(frame, str(eucli(tuple(center_right),rv_bottom)), (200,100), cv2.FONT_HERSHEY_COMPLEX, 1.0, GREEN, 2)
                     '''
                     else:
@@ -771,7 +771,7 @@ def head_eye(vid, loading_bar_smile):
 
         loading_bar_smile.progress(70)
 
-        print(head_score)
+        #print(head_score)
 
         messagep = 'YOUR POSITIVE AREAS: '
         messagen = 'NEEDS IMPROVEMENT: '
@@ -799,11 +799,11 @@ def head_eye(vid, loading_bar_smile):
         
         try:
             total_blink = sum(blinklist)/len(blinklist)
-            print(total_blink)
+            #print(total_blink)
         except:
             print('')
 
-        print("count = ", fps)
+        #print("count = ", fps)
 
         try:
             if total_blink>20:
