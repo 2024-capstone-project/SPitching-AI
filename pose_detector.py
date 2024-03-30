@@ -79,7 +79,7 @@ def draw_info_text(image, brect, facial_text):
 
     return image
 
-@st.cache
+@st.cache_resource
 def load_model():
     return joblib.load(r'pose_XGB_model.pkl')
 
