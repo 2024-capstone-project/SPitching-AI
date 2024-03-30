@@ -440,5 +440,18 @@ elif st.session_state.state == 'analyse':
         # Release the video writer
         output_video.release()
 
+        # Display the output video
+        st.video(output_video_path)
+        st.markdown(str(message))
+
+        data = {'Metric': ['Head Score', 'Eye Score'],
+            'Score': [int(head_score), int(eye_score)]}
+
+        df = pd.DataFrame(data)
+        st.table(df)
+
+        st.write(f"Head score is given for maintaining good head posture. Ensure that your camera is not tilted. The camera should be at your eye level for the system to properly understand the position of your head")
+        st.write(f"Eye score is given for maintaining good eye contact")
+
         # Update loading bar and text
         loading_bar_he.progress(100)
