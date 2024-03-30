@@ -262,7 +262,7 @@ hands = mp_hands.Hands(
 )
 
 # Load XGBoost model
-xgboost_model = joblib.load(r'pgms\hands\hand_main\model\keypoint_classifier\xgboost_model.pkl')  # Replace with the path to your XGBoost model file
+xgboost_model = joblib.load(r'hand_xgboost_model.pkl')  # Replace with the path to your XGBoost model file
 
 # Read labels
 with open('pgms\hands\hand-gesture-recognition-mediapipe-main\model\keypoint_classifier\keypoint_classifier_label.csv',
