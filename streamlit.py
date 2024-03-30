@@ -7,6 +7,8 @@ import datetime
 import plotly.express as px
 from displayDB import display_tables_and_contents
 from head_eye import head_eye
+from io import BytesIO
+import av
 
 # Get the current date and time
 current_datetime = datetime.datetime.now()
@@ -428,30 +430,33 @@ elif st.session_state.state == 'analyse':
 
         output_frames, message, head_score, eye_score = head_eye(file_path, loading_bar_he)
 
-        # Create a video writer
-        output_video_path = "output_video"
-        fourcc = cv2.VideoWriter_fourcc(*'H264')
-        output_video = cv2.VideoWriter(output_video_path, fourcc, 20.0, (output_frames[0].shape[1], output_frames[0].shape[0]))
+        # Encode video frames using PyAV
+        output_video_bytes = BytesIO()
+        output_frames = np.array(output_frames)  # Convert frames to numpy array
 
-        # Write frames to the video
-        for frame in output_frames:
-            output_video.write(frame)
-
-        # Release the video writer
-        output_video.release()
+        with av.open(output_video_bytes, 'w', format='mp4') as container:
+            stream = container.add_stream('h264', rate=20)  # H264 codec with 20 fps
+            for frame in output_frames:
+                frame = av.VideoFrame.from_ndarray(frame, format='rgb24')
+                packet = stream.encode(frame)
+                if packet:
+                    container.mux(packet)
 
         # Display the output video
-        st.video(output_video_path)
+        output_video_bytes.seek(0)  # Reset BytesIO object to start
+        st.video(output_video_bytes, format='video/mp4')
+
+        # Display message and table
         st.markdown(str(message))
 
         data = {'Metric': ['Head Score', 'Eye Score'],
-            'Score': [int(head_score), int(eye_score)]}
+                'Score': [int(head_score), int(eye_score)]}
 
         df = pd.DataFrame(data)
         st.table(df)
 
-        st.write(f"Head score is given for maintaining good head posture. Ensure that your camera is not tilted. The camera should be at your eye level for the system to properly understand the position of your head")
-        st.write(f"Eye score is given for maintaining good eye contact")
+        st.write("Head score is given for maintaining good head posture. Ensure that your camera is not tilted. The camera should be at your eye level for the system to properly understand the position of your head")
+        st.write("Eye score is given for maintaining good eye contact")
 
-        # Update loading bar and text
+        # Update loading bar
         loading_bar_he.progress(100)
