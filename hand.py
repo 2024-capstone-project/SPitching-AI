@@ -264,7 +264,7 @@ hands = mp_hands.Hands(
 
 @st.cache
 def load_model():
-    joblib.load(r'hand_xgboost_model.pkl')
+    return joblib.load(r'hand_xgboost_model.pkl')
 
 # Load XGBoost model
 xgboost_model = load_model()  # Replace with the path to your XGBoost model file
