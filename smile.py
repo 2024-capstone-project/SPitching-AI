@@ -193,7 +193,7 @@ def smile_detector(vid, loading_bar_smile):
                 debug_image = draw_info_text(debug_image, brect, keypoint_classifier_labels[facial_emotion_id], add)
 
         # Screen reflection
-        cv.imshow('Facial Emotion Recognition', debug_image)
+        #cv.imshow('Facial Emotion Recognition', debug_image)
         output_frames.append(debug_image)
     
     loading_bar_smile.progress(80)
