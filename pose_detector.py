@@ -78,6 +78,10 @@ def draw_info_text(image, brect, facial_text):
 
     return image
 
+@st.cache
+def load_model():
+    joblib.load(r'pose_XGB_model.pkl')
+
 def body(vid, loading_bar_pose):
     # Rest of your code remains mostly unchanged, with adjustments for the Pose model
     pos = 0
@@ -108,9 +112,9 @@ def body(vid, loading_bar_pose):
     mp_pose = mp.solutions.pose
     pose = mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5)
 
-    # Load the SVM model
-    model_path = r'pose_XGB_model.pkl'
-    svm_model = joblib.load(model_path)
+    # Load the XGBoost model
+    model_path = load_model()
+    xg_boost_model = joblib.load(model_path)
 
     # Read labels
     with open(r'pose_keypoint_classifier_label.csv', encoding='utf-8-sig') as f:
@@ -168,7 +172,7 @@ def body(vid, loading_bar_pose):
             pre_processed_landmark_list = pre_process_landmark(landmark_list)
 
             # Emotion classification using SVM model
-            facial_emotion_id = svm_model.predict([pre_processed_landmark_list])[0]
+            facial_emotion_id = xg_boost_model.predict([pre_processed_landmark_list])[0]
 
             # Determine the color of the bounding rectangle
             if facial_emotion_id == 0:
