@@ -87,7 +87,7 @@ def draw_info_text(image, brect, facial_text, add):
 
 @st.cache
 def load_model():
-    joblib.load(model_save_path)
+    joblib.load(r'smile_xgboost_model.pkl')
 
 def smile_detector(vid, loading_bar_smile):
     counter = 0
@@ -119,8 +119,6 @@ def smile_detector(vid, loading_bar_smile):
         refine_landmarks=True,
         min_detection_confidence=0.5,
         min_tracking_confidence=0.5) 
-
-    model_save_path = r'smile_xgboost_model.pkl'
 
     # Load the XGBoost model
     xgb_model = load_model()
