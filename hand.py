@@ -261,6 +261,8 @@ hands = mp_hands.Hands(
     min_tracking_confidence=min_tracking_confidence,
 )
 
+
+
 # Load XGBoost model
 xgboost_model = joblib.load(r'hand_xgboost_model.pkl')  # Replace with the path to your XGBoost model file
 
