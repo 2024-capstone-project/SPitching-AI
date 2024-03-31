@@ -385,6 +385,8 @@ elif st.session_state.state == 'analyse':
 
     import pandas as pd
 
+    from moviepy.video.io.VideoFileClip import VideoFileClip
+
     # Upload video file
     uploaded_file = st.file_uploader("Choose a video file", type=["mp4"])
     #record_button = st.button("Record Live Video")
@@ -403,6 +405,27 @@ elif st.session_state.state == 'analyse':
             file_path = os.path.join("temp", uploaded_file.name)
             with open(file_path, "wb") as temp_file:
                 temp_file.write(uploaded_file.read())
+                
+        # Check video duration
+        video_clip = VideoFileClip(file_path)
+        duration = video_clip.duration
+        video_clip.close()
+        
+        if duration > 30:
+            st.write("This is just a prototype. Currently, it doesn't have the power to process videos longer than 30 seconds.")
+            st.write("Trimming video to the first 30 seconds...")
+            
+            # Trim the video
+            trimmed_clip = VideoFileClip(file_path).subclip(0, 30)
+            trimmed_file_path = os.path.join("temp", "trimmed_" + uploaded_file.name)
+            trimmed_clip.write_videofile(trimmed_file_path, codec='libx264', audio_codec='aac', temp_audiofile='temp/temp-audio.m4a', remove_temp=True)
+            trimmed_clip.close()
+            
+            # Delete original video
+            os.remove(file_path)
+            
+            # Update file path
+            file_path = trimmed_file_path
         
         uploaded = 1
 
