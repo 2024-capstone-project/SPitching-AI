@@ -453,6 +453,7 @@ elif st.session_state.state == 'analyse':
         # Display the output video
         output_video_bytes.seek(0)  # Reset BytesIO object to start
         st.video(output_video_bytes, format='video/mp4')
+        output_frames = []
 
         # Display message and table
         st.markdown(str(message))
@@ -516,7 +517,8 @@ elif st.session_state.state == 'analyse':
         # Display the output video
         output_video_bytes.seek(0)  # Reset BytesIO object to start
         st.video(output_video_bytes, format='video/mp4')
-
+        output_frames = []
+              
         st.markdown(str(message))
 
         # Display the health bars
@@ -576,6 +578,7 @@ elif st.session_state.state == 'analyse':
         # Display the output video
         output_video_bytes.seek(0)  # Reset BytesIO object to start
         st.video(output_video_bytes, format='video/mp4')
+        output_frames = []
               
         st.markdown(str(message))
 
@@ -635,6 +638,7 @@ elif st.session_state.state == 'analyse':
         # Display the output video
         output_video_bytes.seek(0)  # Reset BytesIO object to start
         st.video(output_video_bytes, format='video/mp4')
+        output_frames = []
               
         st.markdown(str(message))
 
