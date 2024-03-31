@@ -677,6 +677,8 @@ elif st.session_state.state == 'analyse':
         loading_bar_pose.progress(100)
         loading_text.text("Pose analysis done!")
 
+        os.remove(file_path)
+
         avg_score = (head_score + eye_score + smile_score + hand_score + pose_score)/5
     
         # Retrieve user data
