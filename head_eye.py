@@ -665,7 +665,7 @@ def head_eye(vid, loading_bar_smile):
                 cont =  newirispos2(transformed_eyecont_coordinates, frame)
                 rcont = newirispos2(rtransformed_eyecont_coordinates, frame)
 
-                print((cont[0]+rcont[0])/2, (cont[1]+rcont[1])/2)
+                #print((cont[0]+rcont[0])/2, (cont[1]+rcont[1])/2)
 
                 if 0<=((cont[0]+rcont[0])/2)<=2.5 and 0<=((cont[1]+rcont[1])/2)<=3.5:
                     contact = True
