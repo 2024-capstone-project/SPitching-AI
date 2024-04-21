@@ -77,11 +77,9 @@ def transform_coordinates(coordinates):
     
     return [np.array(transformed_coordinates)]
 
-def landmarkdet(img, results, draw=False):
+def landmarkdet(img, results):
     img_height, img_width = img.shape[:2]
     mesh_coord = [(int(point.x * img_width), int(point.y * img_height)) for point in results.multi_face_landmarks[0].landmark]
-    if draw:
-        [cv2.circle(img, p, 2, (0, 255, 0), -1) for p in mesh_coord]
 
     return mesh_coord
 
