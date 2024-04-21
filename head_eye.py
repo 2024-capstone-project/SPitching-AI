@@ -147,17 +147,6 @@ def newbratio(transformed_eye_coordinates):
     else:
         return False
 
-def smiledet(point1, point2, point33):
-    # Calculate vectors from point1 to point2 and from point1 to point33
-    vector1 = (point2[0] - point1[0], point2[1] - point1[1])
-    vector2 = (point33[0] - point1[0], point33[1] - point1[1])
-
-    # Calculate the cross product of vector1 and vector2
-    cross_product = vector1[0] * vector2[1] - vector1[1] * vector2[0]
-
-    # If the cross product is positive, point2 is below the line
-    return cross_product
-
 import streamlit as st
 
 def draw_bounding_rect(use_brect, image, brect, rect_color):
