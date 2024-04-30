@@ -303,6 +303,7 @@ def hand(vid, loading_bar_hand):
             break
 
         debug_image = copy.deepcopy(image)
+        debug_image = cv2.cvtColor(debug_image, cv2.COLOR_BGR2RGB)
 
         height, width = debug_image.shape[:2]
 
