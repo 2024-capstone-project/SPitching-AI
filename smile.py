@@ -145,6 +145,7 @@ def smile_detector(vid, loading_bar_smile):
             break
         #image = cv.flip(image, 1)  # Mirror display
         debug_image = copy.deepcopy(image)
+        debug_image = cv2.cvtColor(debug_image, cv2.COLOR_BGR2RGB)
 
         # Detection implementation
         image = cv.cvtColor(image, cv.COLOR_BGR2RGB)
