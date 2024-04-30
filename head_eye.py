@@ -343,7 +343,7 @@ def head_eye(vid, loading_bar_smile):
                         straight = 1
                         #print(count, ": Head straight")
                 
-                mesh_coords = landmarkdet(frame, results, False)
+                mesh_coords = landmarkdet(frame, results)
 
                 mesh_points = np.array(mesh_coords)
 
