@@ -138,6 +138,7 @@ def body(vid, loading_bar_pose):
             break
         #image = cv2.flip(image, 1)  # Mirror display
         debug_image = copy.deepcopy(image)
+        debug_image = cv2.cvtColor(debug_image, cv2.COLOR_BGR2RGB)
 
         # Find the dimensions of the frame
         height, width, _ = debug_image.shape
