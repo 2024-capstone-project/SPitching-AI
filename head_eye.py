@@ -258,7 +258,7 @@ def head_eye(vid, loading_bar_smile):
 
             # Resize the frame
             frame = cv2.resize(frame, (new_width, new_height))
-            frame = = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
             fps = fps+1
 
