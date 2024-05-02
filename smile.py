@@ -135,9 +135,9 @@ def smile_detector(vid, loading_bar_smile):
 
     while True:
         # Process Key (ESC: end)
-        key = cv.waitKey(10)
-        if key == 27:  # ESC
-            break
+        #key = cv.waitKey(10)
+        #if key == 27:  # ESC
+            #break
 
         # Camera capture
         ret, image = cap.read()
@@ -202,7 +202,7 @@ def smile_detector(vid, loading_bar_smile):
     loading_bar_smile.progress(80)
 
     cap.release()
-    cv.destroyAllWindows()
+    #cv.destroyAllWindows()
 
     try:
 
