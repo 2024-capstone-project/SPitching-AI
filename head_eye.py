@@ -499,7 +499,7 @@ def head_eye(vid, loading_bar_smile):
         # Release the VideoWriter object.
 
         #cv2.imshow('Image', frame)
-        cv2.destroyAllWindows()
+        #cv2.destroyAllWindows()
     
     try:
 
