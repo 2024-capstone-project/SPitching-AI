@@ -496,9 +496,6 @@ def head_eye(vid, loading_bar_smile):
             output_frames.append(frame)
             #st.image(frame, channels="BGR", caption="Processed Frame")
 
-            if cv2.waitKey(24) & 0xFF == ord('q'):
-                break
-
         # Release the VideoWriter object.
 
         #cv2.imshow('Image', frame)
