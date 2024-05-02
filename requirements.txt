@@ -1,4 +1,3 @@
-libxcb-cursor0
 opencv-python-headless
 plotly
 mediapipe
