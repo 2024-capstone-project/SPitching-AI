@@ -128,9 +128,9 @@ def body(vid, loading_bar_pose):
 
     while True:
         # Process Key (ESC: end)
-        key = cv2.waitKey(10)
-        if key == 27:  # ESC
-            break
+        #key = cv2.waitKey(10)
+        #if key == 27:  # ESC
+            #break
 
         # Camera capture
         ret, image = cap.read()
@@ -206,7 +206,7 @@ def body(vid, loading_bar_pose):
         output_frames.append(debug_image)
 
     cap.release()
-    cv2.destroyAllWindows()
+    #cv2.destroyAllWindows()
 
     loading_bar_pose.progress(80)
 
