@@ -293,9 +293,9 @@ def hand(vid, loading_bar_hand):
     loading_bar_hand.progress(20)
 
     while True:
-        key = cv.waitKey(10)
-        if key == 27:  # ESC
-            break
+        #key = cv.waitKey(10)
+        #if key == 27:  # ESC
+            #break
         number, mode = select_mode(key, mode)
 
         ret, image = cap.read()
@@ -362,11 +362,11 @@ def hand(vid, loading_bar_hand):
         #cv.imshow('Hand Gesture Recognition', debug_image)
         output_frames.append(debug_image)
 
-        if cv.waitKey(24) & 0xFF == ord('q'):
-            break
+        #if cv.waitKey(24) & 0xFF == ord('q'):
+            #break
 
     cap.release()
-    cv.destroyAllWindows()
+    #cv.destroyAllWindows()
 
     loading_bar_hand.progress(80)
 
