@@ -283,7 +283,7 @@ def hand(vid, loading_bar_hand):
     cap = cv.VideoCapture(vid)
     loading_bar_hand.progress(10)
 
-    mode = 0
+    #mode = 0
     opencount = 0
     closecount = 0
     pointcount = 0
@@ -296,7 +296,7 @@ def hand(vid, loading_bar_hand):
         #key = cv.waitKey(10)
         #if key == 27:  # ESC
             #break
-        number, mode = select_mode(key, mode)
+        #number, mode = select_mode(key, mode)
 
         ret, image = cap.read()
         if not ret:
@@ -332,7 +332,7 @@ def hand(vid, loading_bar_hand):
 
                 pre_processed_landmark_list = pre_process_landmark(landmark_list)
 
-                logging_csv(number, mode, pre_processed_landmark_list)
+                #logging_csv(number, mode, pre_processed_landmark_list)
 
                 # Hand sign classification using XGBoost
                 hand_sign_id = xgboost_model.predict([pre_processed_landmark_list])[0]
