@@ -1,4 +1,4 @@
-opencv[gtk]
+opencv-python-headless
 plotly
 mediapipe
 av
