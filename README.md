@@ -6,7 +6,7 @@
 
 In the competitive job market, effective communication, both verbal and non-verbal, is crucial. Up to 50% of communication relies on body language. Job seekers often struggle with conveying the right non-verbal signals during interviews, impacting their chances of securing employment. This project aims to address this challenge and provide a solution that empowers job seekers to enhance their body language skills.
 
-<img align="center" width="100" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Mehrabian.png/640px-Mehrabian.png" alt="Rule" />
+<img align="center" width="250" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Mehrabian.png/640px-Mehrabian.png" alt="Rule" />
 
 📊 **Statistics** underscore the importance of body language in job interviews. Effective non-verbal communication sends positive messages to interviewers, revealing crucial aspects such as confidence, sincerity, and enthusiasm. Elements like posture, facial expressions, and gestures play a pivotal role in shaping interviewers’ perceptions of a candidate’s suitability for a job.
 
