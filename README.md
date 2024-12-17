@@ -8,4 +8,4 @@ head_pose_final/shape_predictor_68_face_landmarks.dat : 사용자 얼굴에 랜�
 
 # Nonverbal Feedback Report folder  
 main branch로 가면 더 자세한 정보를 얻을 수 있습니다.  
-[비언어적 표현에 대한 종합 피드백 레포트 웹사이트 바로가기](interviewbuster.streamlit.app/)
+비언어적 표현에 대한 종합 피드백 레포트 웹사이트 : interviewbuster.streamlit.app/
