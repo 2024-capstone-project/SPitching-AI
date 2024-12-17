@@ -1,98 +1,54 @@
-# Interview Buster
+MediaPipe라는 딥러닝 프레임워크를 활용하여 비언어적 의사소통의 다양한 측면을 분석하고 피드백을 제공한다.
+얼굴 랜드마크 탐지, 머리 자세 추정, 눈 맞춤 분석, 미소 감지, 손 동작, 그리고 신체 자세 분류 등을 통해 발표연습을 하는 사람들이 비언어적 행동에 대해 통찰을 얻을 수 있도록 돕고자 한다.
 
-## Introduction
-
-### Motivation
-
-In the competitive job market, effective communication, both verbal and non-verbal, is crucial. Up to 50% of communication relies on body language. Job seekers often struggle with conveying the right non-verbal signals during interviews, impacting their chances of securing employment. This project aims to address this challenge and provide a solution that empowers job seekers to enhance their body language skills.
-
-<img align="center" width="250" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Mehrabian.png/640px-Mehrabian.png" alt="Rule" />
-
-📊 **Statistics** underscore the importance of body language in job interviews. Effective non-verbal communication sends positive messages to interviewers, revealing crucial aspects such as confidence, sincerity, and enthusiasm. Elements like posture, facial expressions, and gestures play a pivotal role in shaping interviewers’ perceptions of a candidate’s suitability for a job.
-
-The frequency and scale of this issue are widespread, affecting job seekers across various demographics. The urgency of addressing this problem is underscored by the competitive nature of the job market and the impact body language has on interview outcomes. The call to action is to equip job seekers with the tools they need to master the art of non-verbal communication and enhance their prospects in the job market.
-
-### Problem Statement
-
-By leveraging MediaPipe, a deep learning framework, this project aims to develop a system that analyzes and provides feedback on various aspects of non-verbal communication. Through facial landmark detection, head pose estimation, eye contact analysis, smile detection, hand gestures, and body pose classification, this system seeks to empower job seekers with insights into their non-verbal behavior during interviews. Ultimately, the goal is to assist them in refining their body language, fostering confidence, and increasing their chances of success in the competitive job market.
-
-## Proposed Solution
-
-🤖 The proposed solution is an **AI-Powered Non-Verbal Communication Coach** that uses advanced computer vision techniques. For estimating the position and orientation of the head, a PnP (Perspective n Point) solver is used to obtain the roll, pitch, and yaw angles of the head. Eye contact detection involves calculating a gaze value. An Eye Aspect Ratio is calculated for blink detection. The smile detection, hand gesture classification, and body pose classification models are trained on labeled datasets of facial, hand, and pose landmark points, respectively.
-
-## Methodology
-
-### Overview
-
-The proposed system integrates various components to aid job seekers in refining their non-verbal communication skills during interviews. The system includes:
-
-1. **Facial Landmark Detection**: Using MediaPipe’s Face Mesh model to identify faces and detect 3D landmark points.
-2. **Head Pose Estimation**: Utilizing a subset of facial landmarks to determine head orientation by solving the PnP problem.
-3. **Eye Blink Detection**: Employing the Eye Aspect Ratio (EAR) to assess whether the eyes are open or closed.
-4. **Eye Contact Detection**: Calculating gaze ratios to evaluate eye contact, considering head position.
-5. **Smile Classification**: Training machine learning models on a custom dataset of facial landmarks.
-6. **Hand Landmark Detection**: Utilizing MediaPipe’s Hands model to detect hand landmarks.
-7. **Hand Gesture Classification**: Classifying hand gestures based on normalized and scaled landmark points.
-8. **Pose Landmark Detection**: Using MediaPipe’s Pose model to detect and classify upper body poses.
-9. **Feedback Generation**: Providing personalized feedback based on the analysis results.
-
-### Components
-
+### 컴포넌트
 1. **Face Landmark Detection**:
-   - Utilizes MediaPipe’s Face Mesh model to detect 3D facial landmarks in each frame of the input video.
-   - The model comprises the Face Detector (BlazeFace) and the 3D Face Landmark Model (based on ResNet architecture).
+MediaPipe의 Face Mesh 모델을 사용하여 입력 비디오의 각 프레임에서 3D 얼굴 랜드마크를 탐지합니다.
+이 모델은 얼굴 탐지기(BlazeFace)와 3D 얼굴 랜드마크 모델(ResNet 아키텍처 기반)을 포함합니다.
 
 2. **Head Pose Estimation**:
-   - Estimates head position using specific facial landmarks.
-   - Employs a camera matrix to transform 3D coordinates into 2D representations.
-   - Uses the Perspective n Point (PnP) algorithm to find rotation and translation vectors.
+특정 얼굴 랜드마크를 사용하여 머리 위치를 추정합니다.
+카메라 매트릭스를 사용해 3D 좌표를 2D 표현으로 변환합니다.
+Perspective n Point (PnP) 알고리즘을 사용하여 회전 벡터와 변환 벡터를 찾습니다.
 
 3. **Eye Blink Detection**:
-   - Calculates the Eye Aspect Ratio (EAR) using six landmark points around the eye.
-   - Determines the eye state (open or closed) based on the EAR threshold.
+눈 주변의 6개 랜드마크 포인트를 사용하여 Eye Aspect Ratio (EAR)를 계산합니다.
+EAR 임계값을 기준으로 눈 상태(열림 또는 닫힘)를 판단합니다.
 
 4. **Eye Contact Detection**:
-   - Calculates gaze ratios for each eye.
-   - Determines eye contact based on the gaze ratios and defined threshold values.
-   - Uses a variable gaze value for improved accuracy.
+각 눈에 대해 시선 비율을 계산합니다.
+시선 비율과 정의된 임계값을 기반으로 눈 맞춤 여부를 결정합니다.
+정확도를 높이기 위해 가변 시선 값을 사용합니다.
 
 5. **Smile Classification**:
-   - Uses a custom CSV dataset of facial landmarks labeled with different types of smiles.
-   - Normalizes and scales landmarks to train machine learning models for smile classification.
+다양한 유형의 미소가 레이블링된 얼굴 랜드마크의 사용자 정의 CSV 데이터셋을 사용합니다.
+미소 분류를 위해 랜드마크를 정규화하고 크기를 조정하여 머신러닝 모델을 훈련합니다.
 
 6. **Hand Landmark Detection**:
-   - Utilizes MediaPipe’s Hands model to detect hand landmarks from input frames.
-   - Includes palm detection (BlazePalm) and hand landmark prediction stages.
+MediaPipe의 Hands 모델을 사용하여 입력 프레임에서 손 랜드마크를 탐지합니다.
+손바닥 탐지(BlazePalm) 및 손 랜드마크 예측 단계가 포함됩니다.
 
 7. **Hand Gesture Classification**:
-   - Uses a CSV file dataset containing hand landmark points labeled as different hand gestures.
-   - Normalizes and scales landmarks to train machine learning models for gesture classification.
+다양한 손 제스처로 레이블링된 손 랜드마크 포인트를 포함하는 CSV 파일 데이터셋을 사용합니다.
+제스처 분류를 위해 랜드마크를 정규화하고 크기를 조정하여 머신러닝 모델을 훈련합니다.
 
 8. **Pose Landmark Detection**:
-   - Utilizes MediaPipe’s Pose model to detect pose landmarks in each frame of the input video.
-   - Predicts 33 landmarks on the human body using a CNN architecture.
+MediaPipe의 Pose 모델을 사용하여 입력 비디오의 각 프레임에서 자세 랜드마크를 탐지합니다.
+CNN 아키텍처를 사용하여 인체의 33개 랜드마크를 예측합니다.
 
 9. **Pose Classification**:
-   - Uses a CSV file dataset containing pose landmark points labeled as different poses.
-   - Normalizes and scales landmarks to train machine learning models for pose classification.
+다양한 자세로 레이블링된 자세 랜드마크 포인트를 포함하는 CSV 파일 데이터셋을 사용합니다.
+자세 분류를 위해 랜드마크를 정규화하고 크기를 조정하여 머신러닝 모델을 훈련합니다.
 
 10. **Feedback Generation**:
-    - Provides personalized feedback based on observed results.
-    - Considers various cues such as smiling, maintaining eye contact, head posture, body poses, and hand gestures.
+관찰된 결과를 기반으로 개인화된 피드백을 제공합니다.
+미소, 눈 맞춤 유지, 머리 자세, 신체 자세 및 손 제스처와 같은 다양한 신호를 고려합니다.
 
-## Conclusion
+### 웹사이트 연결
+🚀 [Interview Buster](https://interviewbuster.streamlit.app/).
 
-🎯 This project aims to empower job seekers by enhancing their non-verbal communication skills through an AI-Powered Non-Verbal Communication Coach. By leveraging advanced computer vision techniques and deep learning models, the system provides valuable insights and feedback, helping job seekers improve their body language and increase their chances of success in the competitive job market.
-
----
-
-## Access the Application
-
-🚀 The application is available online at [Interview Buster](https://interviewbuster.streamlit.app/).
-
-## Usage
-
-1. Upload a video of your interview practice session.
-2. The system will analyze your non-verbal communication using various computer vision techniques.
-3. Receive detailed feedback on your body language, including facial expressions, head posture, eye contact, hand gestures, and body poses.
-4. Use the feedback to improve your non-verbal communication skills.
+### 사용법
+1. 발표 연습 세션의 비디오를 업로드하세요.
+2. 시스템이 다양한 컴퓨터 비전 기술을 사용하여 비언어적 의사소통을 분석합니다.
+3. 머리 자세, 눈 맞춤, 손 제스처, 신체 자세 등 본인의 바디 랭귀지에 대한 상세한 피드백을 받습니다.
+4. 피드백을 활용하여 비언어적 의사소통 능력을 향상시킬 수 있습니다.
